@@ -37,17 +37,19 @@ class Note(models.Model):
 
 
 # Прямое наследование
-class Message(models.Model):
-    content = models.TextField()
-    published = models.DateTimeField(auto_now_add=True, db_index=True)
+# class Message(models.Model):
+#     content = models.TextField()
+#     published = models.DateTimeField(auto_now_add=True, db_index=True)
+#
+#     class Meta:
+#         ordering = ['-published', ]
+#
+#
+# class PrivateMessage(Message):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     message = models.OneToOneField(Message, on_delete=models.CASCADE, parent_link=True)
 
-    class Meta:
-        ordering = ['-published', ]
 
-
-class PrivateMessage(Message):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.OneToOneField(Message, on_delete=models.CASCADE, parent_link=True)
 
 
 # # Абстракные наследование
@@ -71,6 +73,29 @@ class PrivateMessage(Message):
     # class Meta:
     #     abstract = True
     #     ordering = ['order', 'name']
+
+
+
+
+
+
+#-----------------------------------hw_real_28
+
+
+class Message(models.Model):
+    content = models.TextField()
+    published = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-published']
+
+class PublicMessage(Message):
+    is_public = models.BooleanField(default=True)
+
+class PrivateMessage(PublicMessage):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_public = models.BooleanField(default=False)
+
 
 
 
